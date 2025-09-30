@@ -4,5 +4,5 @@ project(BodySimulation
         DESCRIPTION "A simple body simulation project"
         HOMEPAGE_URL "https://github.com/yhxsajmon/Body-simulation"
         LANGUAGES C)
-add_executable(BodySimulation main.c Body.c render.c)
+add_executable(BodySimulation main.c Body.c bodyArray.c)
 target_link_libraries(BodySimulation m)
