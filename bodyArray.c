@@ -7,7 +7,7 @@ BodyArrayPtr arrayInit(size_t initial_capacity) {
     
     // Fix: capacity is allocated space, size is current count
     list->capacity = initial_capacity;
-    list->size = 0;  // Start with 0 elements
+    list->size = 0; 
 
     list->data = malloc(sizeof(Body) * list->capacity);
     if (!list->data) {

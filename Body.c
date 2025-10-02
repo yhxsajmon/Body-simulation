@@ -17,44 +17,35 @@ Body createBody(double x, double y, double z, double vx, double vy, double vz, d
     return body;
 }
 
-void destroyBody(BodyPtr body) {
-    if (body != NULL) {
-    }
-}
 
-void printBody(BodyPtr body) {
-    if (body == NULL) {
-        printf("Body is NULL\n");
-        return;
-    }
+
+void printBody(Body body) {
     printf("Position: (%.2e, %.2e, %.2e) m\n", 
-           body->position[0], body->position[1], body->position[2]);
+           body.position[0], body.position[1], body.position[2]);
     printf("Velocity: (%.2f, %.2f, %.2f) m/s\n", 
-           body->velocity[0], body->velocity[1], body->velocity[2]);
-    printf("Mass: %.2e kg\n\n", body->mass);
+           body.velocity[0], body.velocity[1], body.velocity[2]);
+    printf("Mass: %.2e kg\n\n", body.mass);
 }
 
-double bodyDistance(BodyPtr a, BodyPtr b) {
-    if (a == NULL || b == NULL) return -1.0;
+double bodyDistance(Body a, Body b) {
     
-    double dx = a->position[0] - b->position[0];
-    double dy = a->position[1] - b->position[1];
-    double dz = a->position[2] - b->position[2];
+    double dx = a.position[0] - b.position[0];
+    double dy = a.position[1] - b.position[1];
+    double dz = a.position[2] - b.position[2];
     
     double distance = sqrt(dx*dx + dy*dy + dz*dz);
     printf("Distance between bodies: %.2e meters\n", distance);
     return distance;
 }
 
-double calculateForce(BodyPtr a, BodyPtr b){
+double calculateForce(Body a, Body b){
     double distance = bodyDistance(a,b);
     double G = 1.0;
-    double force = (G*a->mass*b->mass)/pow(distance,2);
+    double force = (G*a.mass*b.mass)/pow(distance,2);
     return force;
 }
 
 void updateAcceleration(BodyPtr a, BodyPtr b, double timestep) {
-    if (a == NULL || b == NULL) return;
     
     // Calculate distance and direction once
     double dx = b->position[0] - a->position[0];
@@ -67,7 +58,7 @@ void updateAcceleration(BodyPtr a, BodyPtr b, double timestep) {
     // Calculate force
     double G = 1.0;
     double force = (G * a->mass * b->mass) / (distance * distance);
-    
+
     // Normalize direction vector
     double unit_dx = dx / distance;
     double unit_dy = dy / distance;
@@ -76,12 +67,12 @@ void updateAcceleration(BodyPtr a, BodyPtr b, double timestep) {
     // Calculate accelerations for both bodies
     double accel_a = force / a->mass;
     double accel_b = force / b->mass;
-    
+
     // Apply acceleration to both bodies (mutual attraction)
     a->acceleration[0] += accel_a * unit_dx;
     a->acceleration[1] += accel_a * unit_dy;
     a->acceleration[2] += accel_a * unit_dz;
-    
+
     b->acceleration[0] -= accel_b * unit_dx;  // Opposite direction
     b->acceleration[1] -= accel_b * unit_dy;
     b->acceleration[2] -= accel_b * unit_dz;

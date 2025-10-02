@@ -7,8 +7,8 @@
 #include "Body.h"
 
 typedef struct BodyArray {
-    size_t size;      // Fixed: use standard size_t
-    size_t capacity;  // Fixed: use standard size_t
+    size_t size;      
+    size_t capacity; 
     Body *data;
 
 } BodyArray, *BodyArrayPtr;
