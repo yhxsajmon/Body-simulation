@@ -12,8 +12,8 @@ typedef struct Body
     double mass;
 } Body, *BodyPtr;
 
-
-BodyPtr createBody(double x, double y, double z, double vx, double vy, double vz, double ax,double ay,double az,double mass);
+//TODO: Remove the Implementation of BodyPtr to static Body
+Body createBody(double x, double y, double z, double vx, double vy, double vz, double ax,double ay,double az,double mass);
 void destroyBody(BodyPtr body);
 void printBody(BodyPtr body);
 double bodyDistance(BodyPtr a, BodyPtr b);

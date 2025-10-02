@@ -3,24 +3,22 @@
 #include <stdio.h>
 #include <math.h>
 
-// Implementation of functions declared in Body.h would go here
+//Remove existance of BodyPtr
 
 // Function to initialize a body
-BodyPtr createBody(double x, double y, double z, double vx, double vy, double vz, double ax,double ay,double az,double mass) {
-    BodyPtr body = malloc(sizeof(Body));
-    if (body == NULL) return NULL;  // Check malloc success
+Body createBody(double x, double y, double z, double vx, double vy, double vz, double ax,double ay,double az,double mass) {
+    Body body;
     
-    body->position[0] = x; body->position[1] = y; body->position[2] = z;
-    body->velocity[0] = vx; body->velocity[1] = vy; body->velocity[2] = vz;
-    body->acceleration[0] = ax; body->acceleration[1] = ay; body->acceleration[2] = az;
-    body->mass = mass;
+    body.position[0] = x; body.position[1] = y; body.position[2] = z;
+    body.velocity[0] = vx; body.velocity[1] = vy; body.velocity[2] = vz;
+    body.acceleration[0] = ax; body.acceleration[1] = ay; body.acceleration[2] = az;
+    body.mass = mass;
     
     return body;
 }
 
 void destroyBody(BodyPtr body) {
     if (body != NULL) {
-        free(body);
     }
 }
 
