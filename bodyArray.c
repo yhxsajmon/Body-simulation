@@ -20,7 +20,11 @@ BodyArrayPtr arrayInit(size_t initial_capacity) {
 
 
 //Probably correct revision
-void addBody(BodyArrayPtr list, double x, double y, double z, double vx, double vy, double vz, double ax,double ay,double az,double mass) {
+void addBody(BodyArrayPtr list, double x, double y, double z,
+                                double vx, double vy, double vz, 
+                                double ax,double ay,double az,
+                                double mass,double density) 
+{
     if (!list) return;
     
 
@@ -32,9 +36,8 @@ void addBody(BodyArrayPtr list, double x, double y, double z, double vx, double 
         list->capacity = new_capacity;
     }
 
-    Body newBody = createBody(x,y,z,vx,vy,vz,ax,ay,az,mass);
+    list->data[list->size] = createBody(x,y,z,vx,vy,vz,ax,ay,az,mass,density);
 
-    list->data[list->size] = newBody;
     list->size++;
 }
 

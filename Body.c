@@ -3,17 +3,20 @@
 #include <stdio.h>
 #include <math.h>
 
+#ifndef M_PI
+#   define M_PI 3.1415926535897932384626433832
+#endif
 //Remove existance of BodyPtr
 
 // Function to initialize a body
-Body createBody(double x, double y, double z, double vx, double vy, double vz, double ax,double ay,double az,double mass) {
+Body createBody(double x, double y, double z, double vx, double vy, double vz, double ax,double ay,double az,double mass, double density) {
     Body body;
     
     body.position[0] = x; body.position[1] = y; body.position[2] = z;
     body.velocity[0] = vx; body.velocity[1] = vy; body.velocity[2] = vz;
     body.acceleration[0] = ax; body.acceleration[1] = ay; body.acceleration[2] = az;
     body.mass = mass;
-    
+    body.density = density;
     return body;
 }
 
@@ -40,9 +43,29 @@ double bodyDistance(Body a, Body b) {
 
 double calculateForce(Body a, Body b){
     double distance = bodyDistance(a,b);
-    double G = 1.0;
+    double G = 6.674e-11;  // m³/(kg·s²)
     double force = (G*a.mass*b.mass)/pow(distance,2);
     return force;
+}
+
+double calculateRadius(Body body){
+    double radius;
+    double volume;
+
+    // Check for invalid density to avoid division by zero
+    if (body.density <= 0) {
+        printf("ERROR: Invalid density %.2f for body with mass %.2e\n", body.density, body.mass);
+        return 1.0; // Return default radius
+    }
+
+    volume = body.mass / body.density;
+    radius = pow(3.0 * volume / (4.0 * M_PI), 1.0/3.0);
+    
+    // DEBUG: Print calculated values
+    printf("Mass: %.2e, Density: %.2f, Volume: %.2e, Calculated radius: %.2e\n", 
+           body.mass, body.density, volume, radius);
+
+    return radius;
 }
 
 void updateAcceleration(BodyPtr a, BodyPtr b, double timestep) {
@@ -55,27 +78,21 @@ void updateAcceleration(BodyPtr a, BodyPtr b, double timestep) {
     double distance = sqrt(dx*dx + dy*dy + dz*dz);
     if (distance <= 0) return;
     
-    // Calculate force
-    double G = 1.0;
-    double force = (G * a->mass * b->mass) / (distance * distance);
-
-    // Normalize direction vector
+    // FIXED: Use correct gravitational constant
+    double G = 6.674e-11;  // m³/(kg·s²)
+    
+    // Calculate gravitational acceleration on body 'a' due to body 'b'
+    double acceleration_magnitude = (G * b->mass) / (distance * distance);
+    
+    // Normalize direction vector (from a to b)
     double unit_dx = dx / distance;
     double unit_dy = dy / distance;
     double unit_dz = dz / distance;
     
-    // Calculate accelerations for both bodies
-    double accel_a = force / a->mass;
-    double accel_b = force / b->mass;
-
-    // Apply acceleration to both bodies (mutual attraction)
-    a->acceleration[0] += accel_a * unit_dx;
-    a->acceleration[1] += accel_a * unit_dy;
-    a->acceleration[2] += accel_a * unit_dz;
-
-    b->acceleration[0] -= accel_b * unit_dx;  // Opposite direction
-    b->acceleration[1] -= accel_b * unit_dy;
-    b->acceleration[2] -= accel_b * unit_dz;
+    // FIXED: Only apply acceleration to body 'a' (the simulation loop handles the reciprocal)
+    a->acceleration[0] += acceleration_magnitude * unit_dx;
+    a->acceleration[1] += acceleration_magnitude * unit_dy;
+    a->acceleration[2] += acceleration_magnitude * unit_dz;
 }
 
 void updateVelocity(BodyPtr a,double deltatime){
