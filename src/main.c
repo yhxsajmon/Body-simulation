@@ -34,8 +34,8 @@ int main(){
     // FIXED: Mars with proper orbital velocity
     // Position: (x=2.279e11, y=0, z=0) - Mars distance from Sun
     // Velocity: (vx=0, vy=24077, vz=0) - Only tangential velocity for circular orbit
-    addBody(list, 2.279e11, 0.0, 0.0, 0.0, 24077.0, 0.0, 0.0, 0.0, 0.0, 6.39e23, 3.93); // Mars
-    
+    addBody(list, 2.279e11, 0.0, 0.0, 0.0, 24077.0, 0.0, 0.0, 0.0, 0.0, 6.39e29, 3.93); // Mars
+    //addBody(list,)
     // DEBUG: Check what was actually stored
     printf("=== DEBUG: Bodies after creation ===\n");
     for(int i = 0; i < list->size; i++) {
@@ -56,7 +56,7 @@ int main(){
 }
 
 void simulationLoop(BodyArrayPtr list, SDL_Renderer* renderer){
-    double deltatime = 3600; // 1 minute instead of 1 hour
+    double deltatime = 21600; // 2 h
     // Even better: double deltatime = 10.0; // 10 seconds
     SDL_Event event;
     int running = 1;

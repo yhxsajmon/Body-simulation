@@ -10,5 +10,22 @@ project(BodySimulation
 
         add_subdirectory(vendored/SDL EXCLUDE_FROM_ALL)
 
-add_executable(BodySimulation main.c Body.c bodyArray.c render.c)
+        include_directories(include)
+
+        set(SOURCES
+                src/main.c
+                src/Body.c
+                src/BodyArray.c
+                src/render.c
+        )
+
+add_executable(BodySimulation ${SOURCES})
 target_link_libraries(BodySimulation m SDL3::SDL3)
+
+target_compile_options(BodySimulation PRIVATE -Wall -Wextra -std=c99)
+
+# Debug configuration
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    target_compile_definitions(BodySimulation PRIVATE DEBUG)
+    target_compile_options(BodySimulation PRIVATE -g)
+endif()
